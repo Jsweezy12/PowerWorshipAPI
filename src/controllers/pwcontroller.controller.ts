@@ -1,35 +1,17 @@
-import {
-  Count,
-  CountSchema,
-  Filter,
-  FilterExcludingWhere,
-  repository,
-  Where,
-} from '@loopback/repository';
-import {
-  post,
-  param,
-  get,
-  getFilterSchemaFor,
-  getModelSchemaRef,
-  getWhereSchemaFor,
-  patch,
-  put,
-  del,
-  requestBody,
-} from '@loopback/rest';
+import {Count, CountSchema, Filter, FilterExcludingWhere, repository, Where} from '@loopback/repository';
+import {del, get, getModelSchemaRef, param, patch, post, put, requestBody} from '@loopback/rest';
 import {Pwapi} from '../models';
 import {PwapiRepository} from '../repositories';
 
 export class PwcontrollerController {
   constructor(
     @repository(PwapiRepository)
-    public pwapiRepository : PwapiRepository,
+    public pwapiRepository: PwapiRepository,
   ) {}
 
 
 
-  
+
 
   @post('/pwapis', {
     responses: {
@@ -89,6 +71,45 @@ export class PwcontrollerController {
   ): Promise<Pwapi[]> {
     return this.pwapiRepository.find(filter);
   }
+
+
+  //GEt all names
+  @post('/pwapisall', {
+    responses: {
+      '200': {
+        description: 'Pwapi model instance',
+        content: {'application/json': {schema: getModelSchemaRef(Pwapi)}},
+      },
+    },
+  })
+  async getonlynames(
+    @requestBody({
+      description: 'request object value',
+      required: false,
+      content: {
+        'application/json': {
+          schema: {type: 'object'},
+        },
+        'application/x-www-form-urlencoded': {
+          schema: {type: 'object'},
+        },
+        'application/xml': {
+          schema: {type: 'object'},
+        },
+      },
+    })
+    data: object,
+  ): Promise<Object> {
+    //custom filter
+    let filter = {
+      fields: {
+        id: true, folder: true, title: true, notes: true
+      }
+    }
+    return this.pwapiRepository.find(filter);
+  }
+
+
 
   @patch('/pwapis', {
     responses: {

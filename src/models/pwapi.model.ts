@@ -16,6 +16,11 @@ export class Pwapi extends Entity {
   })
   notes?: string[];
 
+  @property({
+    type: 'object',
+  })
+  url?: object;
+
 
 
   // Define well-known properties here
